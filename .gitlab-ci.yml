@@ -1,0 +1,23 @@
+stages:
+  - build
+
+variables:
+  DOCKER_BUILDKIT: 1
+
+build-image:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  parallel:
+    matrix:
+      - GRAALVM_VERSION: ["17", "21", "24"]
+  script:
+    - docker build --build-arg GRAALVM_VERSION=${GRAALVM_VERSION} -t $CI_REGISTRY_IMAGE:graal-${GRAALVM_VERSION}-$CI_COMMIT_REF_SLUG .
+    - docker push $CI_REGISTRY_IMAGE:${GRAALVM_VERSION}
+  only:
+    changes:
+      - Dockerfile
+      - entrypoint.sh
