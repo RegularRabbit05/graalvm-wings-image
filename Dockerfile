@@ -1,5 +1,5 @@
-ARG GRAALVM_VERSION
-FROM ghcr.io/graalvm/jdk-community:${GRAALVM_VERSION}
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
 
 LABEL author="Gregg" maintainer="gregg@largenut.com"
 LABEL org.opencontainers.image.source="gitlab.largenut.com"
