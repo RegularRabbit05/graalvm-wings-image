@@ -46,9 +46,9 @@ build-image:
           exit 1
           ;;
       esac
-    - echo "Building GraalVM $GRAALVM_VERSION with base image: $BASE_IMAGE"
-    - docker build --build-arg BASE_IMAGE=${BASE_IMAGE} -t $CI_REGISTRY_IMAGE:${GRAALVM_VERSION} .
-    - docker push $CI_REGISTRY_IMAGE:${GRAALVM_VERSION}
+      echo "Building GraalVM $GRAALVM_VERSION with base image: $BASE_IMAGE"
+      docker build --build-arg BASE_IMAGE=${BASE_IMAGE} -t $CI_REGISTRY_IMAGE:${GRAALVM_VERSION} .
+      docker push $CI_REGISTRY_IMAGE:${GRAALVM_VERSION}
   only:
     changes:
       - Dockerfile
