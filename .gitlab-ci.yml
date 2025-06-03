@@ -13,9 +13,41 @@ build-image:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   parallel:
     matrix:
-      - GRAALVM_VERSION: ["17", "20", "21", "22", "23", "24"]
+      - GRAALVM_VERSION: ["8", "11", "17", "20", "21", "22", "23", "24"]
   script:
-    - docker build --build-arg GRAALVM_VERSION=${GRAALVM_VERSION} -t $CI_REGISTRY_IMAGE:${GRAALVM_VERSION} .
+    - |
+      case "$GRAALVM_VERSION" in
+        "8")
+          BASE_IMAGE="ghcr.io/graalvm/graalvm-ce:ol8-java8-21.1.0"
+          ;;
+        "11")
+          BASE_IMAGE="ghcr.io/graalvm/graalvm-ce:ol8-java11-22.3.3"
+          ;;          
+        "17")
+          BASE_IMAGE="ghcr.io/graalvm/jdk-community:17"
+          ;;
+        "20")
+          BASE_IMAGE="ghcr.io/graalvm/jdk-community:20"
+          ;;          
+        "21")
+          BASE_IMAGE="ghcr.io/graalvm/jdk-community:21"
+          ;;
+        "22")
+          BASE_IMAGE="ghcr.io/graalvm/jdk-community:22"
+          ;;
+        "23")
+          BASE_IMAGE="ghcr.io/graalvm/jdk-community:23"
+          ;;
+        "24")
+          BASE_IMAGE="ghcr.io/graalvm/jdk-community:24"
+          ;;          
+        *)
+          echo "Unsupported GraalVM version: $GRAALVM_VERSION"
+          exit 1
+          ;;
+      esac
+    - echo "Building GraalVM $GRAALVM_VERSION with base image: $BASE_IMAGE"
+    - docker build --build-arg BASE_IMAGE=${BASE_IMAGE} -t $CI_REGISTRY_IMAGE:${GRAALVM_VERSION} .
     - docker push $CI_REGISTRY_IMAGE:${GRAALVM_VERSION}
   only:
     changes:
