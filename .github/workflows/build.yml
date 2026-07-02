@@ -70,7 +70,7 @@ jobs:
               BASE_IMAGE="ghcr.io/graalvm/jdk-community:24"
               ;;
             "25")
-              BASE_IMAGE="ghcr.io/graalvm/jdk-community:24"
+              BASE_IMAGE="ghcr.io/graalvm/jdk-community:25"
               ;;                     
             *)
               echo "Unsupported GraalVM version: $GRAALVM_VERSION"
